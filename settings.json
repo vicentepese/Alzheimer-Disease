@@ -1,0 +1,14 @@
+{
+    "folder":{
+        "Data":"Data/",
+        "HLACalls":"Data/HLACalls/",
+        "Relatedness":"Data/relatedness_EUR/"
+    },
+
+    "file":{
+        "SNP_covars":"Data/SNParray_covar_pheno_unrel_ready.tsv",
+        "HLA_df":"Data/HLA_df.csv",
+        "relatedness_df":"Data/relatedness_df.csv"
+        
+    }
+}
