@@ -2,13 +2,26 @@
     "folder":{
         "Data":"Data/",
         "HLACalls":"Data/HLACalls/",
-        "Relatedness":"Data/relatedness_EUR/"
+        "Relatedness":"Data/relatedness_EUR/",
+        "Outputs":"Outputs",
+        "HLA_Output_Chi2":"Outputs/HLA_Chi2/",
+        "HLA_Output_GLM":"Outputs/HLA_GLM/",
+        "HLA_Output_GLM_Iter":"Outputs/HLA_GLM_Iter/",
+        "HLA_Output_AA":"Outputs/HLA_AA/",
+        "HLA_Output_AA_GLM":"Outputs/HLA_AA_GLM/"
     },
 
     "file":{
         "SNP_covars":"Data/SNParray_covar_pheno_unrel_ready.tsv",
         "HLA_df":"Data/HLA_df.csv",
-        "relatedness_df":"Data/relatedness_df.csv"
-        
-    }
+        "relatedness_df":"Data/relatedness_df.csv",
+        "HLA_covars":"Data/SNParray_covar_pheno_unrel_ready.tsv",
+        "HLA_covars_filt":"Data/HLA_covars_filt.csv",
+        "AA_alignment":"Data/AminoAcid_alignment.csv"
+
+    },
+
+    "controlAlleles":[],
+    "AA2control":"DRB1_11_V"
+  
 }
