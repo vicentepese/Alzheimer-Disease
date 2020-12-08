@@ -26,8 +26,16 @@ settings <- jsonlite::read_json("settings.json")
 `%notin%` <- Negate(`%in%`)
 
 # Import HLA calls and covariates
-HLA.df <- read.csv(settings$file$HLA_df)
-covars.df <- read.csv(settings$file$HLA_covars_filt)
+if(settings$dataset == "Stanford"){
+  HLA.df <- read.csv(settings$file$HLA_df)
+  covars.df <- read.csv(settings$file$HLA_covars_filt)
+} else if (settings$dataset == "UKB"){
+  HLA.df <- read.csv(settings$file$HLA_df_UKB)
+  covars.df <- read.csv(settings$file$HLA_covars_UKB)
+  covars.df$pheno <- covars.df$pheno +1
+  
+}
+
 
 ############ COMPUTE ALLELE/CARRIER COUNT/FREQUENCIES ############
 
@@ -181,8 +189,11 @@ pvals <- c(); l1group <- c(); l2group <- c(); l2locus <- c()
 
 # For each locus 
 loci <- c("A","B","C","DPB1", "DQA1", "DQB1", "DRB1", "DRB3", "DRB4", "DRB5")
+
 idx <- 1
 for (locus in loci){
+  
+  print(paste0("Current locus: ", locus))
   
   # Compute allele and carrier counts and frequencies
   ACFREQ.cases <- computeACFREQ(data.cases, locus, 'case');
@@ -216,10 +227,18 @@ for (locus in loci){
                             by = 'allele')
   
   # Write to excel output
-   write.xlsx(x = HLA.alleles.df, file = paste(settings$folder$HLA_Output_Chi2, 'HLA_AnalysisAlleles','.xlsx', sep = ''), sheetName = locus,
-           col.names = TRUE, row.names = FALSE, append = TRUE)
-   write.xlsx(x = HLA.carriers.df, file = paste(settings$folder$HLA_Output_Chi2, 'HLA_AnalysisCarriers','.xlsx', sep = ''), sheetName = locus,
-            col.names = TRUE, row.names = FALSE, append = TRUE)
+  if (settings$dataset == "Stanford"){
+    write.xlsx(x = HLA.alleles.df, file = paste(settings$folder$HLA_Output_Chi2, 'HLA_AnalysisAlleles','.xlsx', sep = ''), sheetName = locus,
+               col.names = TRUE, row.names = FALSE, append = TRUE)
+    write.xlsx(x = HLA.carriers.df, file = paste(settings$folder$HLA_Output_Chi2, 'HLA_AnalysisCarriers','.xlsx', sep = ''), sheetName = locus,
+               col.names = TRUE, row.names = FALSE, append = TRUE)
+  } else if (settings$dataset == "UKB"){
+    write.xlsx(x = HLA.alleles.df, file = paste(settings$folder$HLA_Output_Chi2, 'HLA_AnalysisAlleles_UKB','.xlsx', sep = ''), sheetName = locus,
+               col.names = TRUE, row.names = FALSE, append = TRUE)
+    write.xlsx(x = HLA.carriers.df, file = paste(settings$folder$HLA_Output_Chi2, 'HLA_AnalysisCarriers_UKB','.xlsx', sep = ''), sheetName = locus,
+               col.names = TRUE, row.names = FALSE, append = TRUE)
+  }
+
 
 }
 

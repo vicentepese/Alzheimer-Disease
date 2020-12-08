@@ -139,7 +139,11 @@ c(Ncases, Ncontrols) %<-% c(HLA.df$pheno %>% table %>%.['1'], HLA.df$pheno %>% t
 # Initialize loop
 locus <- c(); AA.eval <- c();  pos.eval <- c(); AA.estimate <- c()
 intercept.PVAL <- c(); AA.pval <- c(); PC1.pval <-c(); PC2.pval <- c(); PC3.pval <- c(); AA2control.pval <- c();
-alleles <- c()
+alleles <- c(); 
+
+# Initialize loop for map variables
+colnameMapPos <- c()
+mapPos.df <- matrix(nrow = nrow(HLA.df))
 
 # For each locus 
 for (L in loci){
@@ -166,7 +170,7 @@ for (L in loci){
       for (AA in AAs){
         
         # Skip controlled alleles
-        if (paste(L,pos,AA, sep='_') == settings$AA2control){
+        if (paste(L,pos,AA, sep='_') == settings$AA2control[1]){
           next
         }
 
@@ -177,6 +181,10 @@ for (L in loci){
         
         # Crete one hot encoding dataframes
         data.AA <- data2OHE(settings, HLA.df, allelesAA, covars.df, AA_alignment); colnames(data.AA)[2] <- paste(L,pos,AA, sep = '_')
+        
+        # Get map of positions
+        mapPos.df <- cbind(mapPos.df, data.AA[,c(paste(L,pos,AA, sep='_'))])
+        colnameMapPos <- c(colnameMapPos, paste(L,pos,AA, sep='_'))
         
         # Run generalized linear model 
         model.AA <- runGLM(settings, data.AA)
@@ -194,8 +202,11 @@ for (L in loci){
         AA.estimate <- c(AA.estimate, coefs[2,1]); intercept.PVAL <- c(intercept.PVAL, coefs[1, pvalDim])
         AA.pval <- c(AA.pval, coefs[2, pvalDim]); PC1.pval <- c(PC1.pval, coefs[3, pvalDim]);
         PC2.pval <- c(PC2.pval, coefs[4, pvalDim]); PC3.pval <- c(PC3.pval, coefs[5, pvalDim]); 
-        AA2control.pval <- c(AA2control.pval, coefs[6, pvalDim]);
         alleles <- c(alleles, paste(allelesAA.OG, collapse = '; '))
+        if (dim(coefs)[1] == 6){
+          AA2control.pval <- c(AA2control.pval, coefs[6, pvalDim]);
+        }
+        
       }
     }
   }

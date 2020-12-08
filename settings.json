@@ -2,6 +2,7 @@
     "folder":{
         "Data":"Data/",
         "HLACalls":"Data/HLACalls/",
+        "HLACalls_UKB":"/media/vicente/TOSHIBA EXT/UBK_HLA/AlzHLA_2020/UKBHLA/concatedHLA/",
         "Relatedness":"Data/relatedness_EUR/",
         "Outputs":"Outputs",
         "HLA_Output_Chi2":"Outputs/HLA_Chi2/",
@@ -9,19 +10,27 @@
         "HLA_Output_GLM_Iter":"Outputs/HLA_GLM_Iter/",
         "HLA_Output_AA":"Outputs/HLA_AA/",
         "HLA_Output_AA_GLM":"Outputs/HLA_AA_GLM/"
+        
     },
 
     "file":{
-        "SNP_covars":"Data/SNParray_covar_pheno_unrel_ready.tsv",
+        "SNP_covars":"Data/Data/SNParray_covar_pheno_unrel_ready.tsv",
+        "pheno_UKB":"/media/vicente/TOSHIBA EXT/UBK_HLA/AlzHLA_2020/UKBHLA/phenotype_AD_proxy.tsv",
+        "individuals_UBK":"/media/vicente/TOSHIBA EXT/UBK_HLA/AlzHLA_2020/UKBHLA/set_of_individuals_for_analysis.tsv",
+        "covars_UKB":"/media/vicente/TOSHIBA EXT/UBK_HLA/AlzHLA_2020/UKBHLA/covar_LastAgeSex40PCAsArrayCenter.tsv",
         "HLA_df":"Data/HLA_df.csv",
+        "HLA_df_UKB":"Data/HLA_df_UKB.csv",
         "relatedness_df":"Data/relatedness_df.csv",
-        "HLA_covars":"Data/SNParray_covar_pheno_unrel_ready.tsv",
+        "HLA_covars":"Data/SNParray_covar_pheno_unrel_HLAready.tsv",
+        "HLA_covars_UKB":"Data/covars_UKB.csv",
         "HLA_covars_filt":"Data/HLA_covars_filt.csv",
         "AA_alignment":"Data/AminoAcid_alignment.csv"
 
     },
 
     "controlAlleles":[],
-    "AA2control":"DRB1_11_V"
+    "AA2control":[],
+    "dataset":"Stanford",
+    "filterProb":false
   
 }

@@ -24,10 +24,19 @@ settings <- jsonlite::read_json("settings.json")
 `%notin%` <- Negate(`%in%`)
 
 # Import HLA calls and covariates
-HLA.df <- read.csv(settings$file$HLA_df)
-covars.df <- read.csv(settings$file$HLA_covars_filt)
-covars.df$pheno <- covars.df$pheno -1
-covars.df$sex <- covars.df$sex -1
+if(settings$dataset == "Stanford"){
+  HLA.df <- read.csv(settings$file$HLA_df)
+  covars.df <- read.csv(settings$file$HLA_covars_filt)
+  covars.df$pheno <- covars.df$pheno -1
+  covars.df$sex <- covars.df$sex -1
+} else if (settings$dataset == "UKB"){
+  HLA.df <- read.csv(settings$file$HLA_df_UKB)
+  covars.df <- read.csv(settings$file$HLA_covars_UKB)
+  covars.df$pheno <- covars.df$pheno 
+  
+}
+
+
 
 ########### ONE HOT ENCODING FUNCTIONS ###############
 
@@ -232,6 +241,9 @@ models.df <- data.frame()
 # For each locus 
 for (locus in loci){
   
+  # Print 
+  print(paste0("Current loci: ", locus))
+  
   # Subset based on locus
   allele1 <- paste(locus, '.1',sep = '')
   allele2 <- paste(locus,'.2', sep =  '')
@@ -271,11 +283,16 @@ for (locus in loci){
                               ACFREQ.df[,c(1,which(grepl(paste(c('A0','A1','A2', 'carrier'), collapse = '|'), colnames(ACFREQ.df))))],
                               by = 'allele')
   
-  # Write 
-  write.xlsx(x = HLA.GLM_alleles.df, file = paste(settings$folder$HLA_Output_GLM, 'HLA_GLM_Alleles','.xlsx', sep = ''), sheetName = locus, 
-             col.names = TRUE, row.names = FALSE, append = TRUE)
-  write.xlsx(x = HLA.GLM_carriers.df, file = paste(settings$folder$HLA_Output_GLM, 'HLA_GLM_Carriers','.xlsx', sep = ''), sheetName = locus, 
-             col.names = TRUE, row.names = FALSE, append = TRUE)
-  
+  # Write to excel output
+  if (settings$dataset == "Stanford"){
+    write.xlsx(x = HLA.GLM_alleles.df, file = paste(settings$folder$HLA_Output_GLM, 'HLA_AnalysisAlleles','.xlsx', sep = ''), sheetName = locus,
+               col.names = TRUE, row.names = FALSE, append = TRUE)
+    write.xlsx(x = HLA.GLM_carriers.df, file = paste(settings$folder$HLA_Output_GLM, 'HLA_AnalysisCarriers','.xlsx', sep = ''), sheetName = locus,
+               col.names = TRUE, row.names = FALSE, append = TRUE)
+  } else if (settings$dataset == "UKB"){
+    write.xlsx(x = HLA.GLM_alleles.df, file = paste(settings$folder$HLA_Output_GLM, 'HLA_AnalysisAlleles_UKB','.xlsx', sep = ''), sheetName = locus,
+               col.names = TRUE, row.names = FALSE, append = TRUE)
+    write.xlsx(x = HLA.GLM_carriers.df, file = paste(settings$folder$HLA_Output_GLM, 'HLA_AnalysisCarriers_UKB','.xlsx', sep = ''), sheetName = locus,
+               col.names = TRUE, row.names = FALSE, append = TRUE)
+  }
 }
-

@@ -37,7 +37,7 @@ covars.df <- read.csv(settings$file$HLA_covars_filt)
 covars.df$pheno <- covars.df$pheno -1
 covars.df$sex <- covars.df$sex -1
 
-# Add phenotype to HLA datafra,e 
+# Add phenotype to HLA dataframee 
 HLA.df <- merge(HLA.df, covars.df[,c("sample.id.file", "pheno")], by = "sample.id.file")
 
 # Import amino acid alignment 
