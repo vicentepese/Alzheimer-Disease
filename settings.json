@@ -2,6 +2,7 @@
     "folder":{
         "Data":"Data/",
         "HLACalls":"Data/HLACalls/",
+        "HLACalls_Individuals":"Data/HLACalls_Individuals/",
         "HLACalls_UKB":"/media/vicente/TOSHIBA EXT/UBK_HLA/AlzHLA_2020/UKBHLA/concatedHLA/",
         "Relatedness":"Data/relatedness_EUR/",
         "Outputs":"Outputs",
@@ -14,7 +15,7 @@
     },
 
     "file":{
-        "SNP_covars":"Data/Data/SNParray_covar_pheno_unrel_ready.tsv",
+        "SNP_covars":"Data/Data/SNParray_covar_pheno_unrel_HLAready.tsv",
         "pheno_UKB":"/media/vicente/TOSHIBA EXT/UBK_HLA/AlzHLA_2020/UKBHLA/phenotype_AD_proxy.tsv",
         "individuals_UBK":"/media/vicente/TOSHIBA EXT/UBK_HLA/AlzHLA_2020/UKBHLA/set_of_individuals_for_analysis.tsv",
         "covars_UKB":"/media/vicente/TOSHIBA EXT/UBK_HLA/AlzHLA_2020/UKBHLA/covar_LastAgeSex40PCAsArrayCenter.tsv",

@@ -207,7 +207,6 @@ controlAllele = function(as2control, HLA.df){
 
 ############ REGRESSION MODEL ############
 
-
 runLogisticRegression = function(locus, OHE.carrierFreq.data, covars.df, as2control = NULL){
   
   ## Allele Frequency 
@@ -299,7 +298,6 @@ cases.ids <- covars.df$sample.id.file[which(covars.df$pheno ==1)]
 controls.ids <- covars.df$sample.id.file[which(covars.df$pheno ==0)]
 data.cases <- HLA.df %>% filter(sample.id.file %in% cases.ids)
 data.controls <- HLA.df %>% filter(sample.id.file %in% controls.ids)
-
 
 # Initialize while lopp
 pval <- 0; as2control <- c(); signAlleles <- list(); 

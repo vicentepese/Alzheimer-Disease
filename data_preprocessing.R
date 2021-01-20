@@ -31,14 +31,7 @@ HLA.df <- read.csv(paste0(settings$folder$HLACalls,HLACalls_names[1]));
 # Create new variables 
 HLA.df$file.origin <- HLA.df$fileName %>% lapply(function(x) gsub('[[:digit:]]+', '', x %>% strsplit('_') %>% unlist() %>% .[1])) %>% unlist()
 HLA.df$sample.id.file <- paste0(HLA.df$file.origin,'_', HLA.df$sample.id)
-
-# Filter file to get subjects in covars file
-HLA.df.filt <- HLA.df[which(HLA.df$sample.id.file %in% covars.df$sample.id.file),]
-
-# Remove duplicates based on alleles, and sample.id.file
-HLA.df.filt <- HLA.df.filt %>% distinct(sample.id.file, .keep_all = TRUE)
-HLA.df.filt <- HLA.df.filt[c(1,7,8,2,3)]
-covars.df <- covars.df %>% distinct(sample.id.file, .keep_all = TRUE)
+HLA.df <- HLA.df[c(1,7,8,2,3)]
 
 # Merge
 for (file in HLACalls_names[2:length(HLACalls_names)]){
@@ -55,9 +48,19 @@ for (file in HLACalls_names[2:length(HLACalls_names)]){
   df_loop <- df_loop[c(1,7,8,2,3)]
   
   # Merge
-  HLA.df.filt <- merge(HLA.df.filt, df_loop[-c(1:2)], by.x = 'sample.id.file', by.y = 'sample.id.file')
+  HLA.df <- merge(HLA.df, df_loop[-c(1:2)], by.x = 'sample.id.file', by.y = 'sample.id.file', all = TRUE)
   
 }
+
+# CHECK: NAs
+missHLA <- HLA.df[which(is.na(HLA.df), arr.ind=TRUE),]
+
+# Filter file to get subjects in covars file
+HLA.df.filt <- HLA.df[which(HLA.df$sample.id.file %in% covars.df$sample.id.file),]
+
+# Remove duplicates based on alleles, and sample.id.file
+HLA.df.filt <- HLA.df.filt %>% distinct(sample.id.file, .keep_all = TRUE)
+covars.df <- covars.df %>% distinct(sample.id.file, .keep_all = TRUE)
 
 # Filter covars 
 covars.df <- covars.df[which(covars.df$sample.id.file %in% HLA.df.filt$sample.id.file),]
@@ -75,10 +78,13 @@ pairs.df <- data.frame(id1 = c(), id2 = c())
 for (i in 1:nrow(rel.dup.df)){
   
   # Get ID1 and ID2 
-  id1 <- rel.dup.df$ID1[i]; id2 <- rel.dup.df$ID2[i]
+  id1 <- paste0(rel.dup.df$FID1 %>% lapply(function(x) gsub('[[:digit:]]+', '', x %>% strsplit('_') %>% unlist() %>% .[1])) %>% unlist() %>% .[i],
+                "_",rel.dup.df$ID1[i]); 
+  id2 <- paste0(rel.dup.df$FID2 %>% lapply(function(x) gsub('[[:digit:]]+', '', x %>% strsplit('_') %>% unlist() %>% .[1])) %>% unlist() %>% .[i]
+                ,"_",rel.dup.df$ID2[i]); 
   
   # Filter 
-  df <- HLA.df.filt %>% filter(sample.id %in% c(id1, id2))
+  df <- HLA.df.filt %>% filter(sample.id.file %in% c(id1, id2))
   
   # Check if identical 
   if (any(duplicated(df[,c(4:23)]) == TRUE)){
@@ -92,10 +98,6 @@ for (i in 1:nrow(rel.dup.df)){
 dupSubj <- pairs.df$id1 %>% unique()
 HLA.df.filt <- HLA.df.filt %>% filter(sample.id %notin% dupSubj)
 covars.df <- covars.df %>% filter(IID %notin% dupSubj)
-
-# Remove identical HLA calls
-HLA.df.filt <- HLA.df.filt[-c(which(duplicated(HLA.df.filt[,4:23]))),]
-covars.df <- covars.df %>% filter(sample.id.file %in% HLA.df.filt$sample.id.file)
 
 # Write 
 write.csv(HLA.df.filt, file = settings$file$HLA_df, row.names = FALSE)
